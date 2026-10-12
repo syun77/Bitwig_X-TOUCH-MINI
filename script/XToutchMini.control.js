@@ -31,6 +31,10 @@ const KNOB_6 = 5;
 const KNOB_7 = 6;
 const KNOB_8 = 7;
 
+// BitwigアクションID.
+const MOVE_PLAYBACK_START_BACKWARD_ACTION = "move_playback_start_time_one_step_backward";
+const MOVE_PLAYBACK_START_FORWARD_ACTION = "move_playback_start_time_one_step_forward";
+
 // ボタン(Note番号)の定義 (MCモード仕様に書き換え).
 /// 1段目.
 const BTN_PLUGIN_WINDOW = 89; // プラグインウィンドウの表示/非表示.
@@ -63,6 +67,8 @@ var isPressedALT = false; // ALTキーを押しているかどうか.
 
 // アプリケーション.
 var application;
+var movePlaybackStartBackwardAction;
+var movePlaybackStartForwardAction;
 // transport変数.
 var transport;
 
@@ -149,6 +155,8 @@ function init() {
   
   // アプリケーションを生成.
   application = host.createApplication();
+  movePlaybackStartBackwardAction = application.getAction(MOVE_PLAYBACK_START_BACKWARD_ACTION);
+  movePlaybackStartForwardAction = application.getAction(MOVE_PLAYBACK_START_FORWARD_ACTION);
 
   // Transportを生成.
   transport = host.createTransport();
@@ -558,6 +566,10 @@ function justRotateKnow(data1, data2) {
       		return;
       	}
       }
+      if(isPressedALT && paramIndex == KNOB_8) {
+        movePlaybackStartByGridStep(increment);
+        return;
+      }
       if(isPopupBrowserOpen()) {
       	// ポップアップブラウザを開いているときは特殊処理.
       	if(paramIndex == KNOB_8) {
@@ -592,6 +604,22 @@ function shiftedKnob8(v) {
 	
 	// ページ切り替え表示.
 	pendingShowPageChange = true;
+}
+
+// ALTを押しているときの8番目のノブの挙動.
+function movePlaybackStartByGridStep(increment) {
+	if(increment == 0) {
+		return;
+	}
+
+	var action = increment > 0
+		? movePlaybackStartForwardAction
+		: movePlaybackStartBackwardAction;
+	var stepCount = Math.abs(increment);
+
+	for(var i = 0; i < stepCount; i++) {
+		action.invoke();
+	}
 }
 
 // ポップアップブラウザを開いているときのノブ8番目の特殊処理.

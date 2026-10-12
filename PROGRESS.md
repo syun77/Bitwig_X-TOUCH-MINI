@@ -2,35 +2,32 @@
 
 ## Current task
 
-- Objective: Document installation and all currently implemented controller-script features in `README.md`.
+- Objective: Determine whether arranger zooming performed with the mouse wheel can be controlled from the Bitwig controller script and explain the available mappings and limitations.
 - Status: Complete.
 
 ## Completed
 
-- Read the existing README and the complete `script/XToutchMini.control.js` implementation.
-- Identified the MC-mode MIDI mappings, Remote Controls behavior, transport and track controls, popup-browser behavior, LED feedback, and fixed device-insertion assignments.
-- Rewrote `README.md` with prerequisites, OS-specific installation paths, MC-mode setup, Bitwig registration, complete control mappings, fixed device assignments, and current constraints.
-- Added concise installation and compatibility facts to `AGENTS.md` for future repository work.
-- Completed the required final refactoring pass: clarified SHIFT encoder behavior, page notifications, and reserved ALT assignments; no further structural changes were needed.
+- Read the previous task state.
+- Verified the zoom methods inherited by `Arranger` from `TimelineEditor` and their API versions.
+- Identified the arranger zoom and playback-start-anchored zoom application-action IDs in the installed Bitwig resources.
+- Verified that arbitrary-position `ScrollbarModel.zoomAtPosition(position, distance)` was introduced in API 21, while this script targets API 20.
 
 ## Important decisions
 
-- Document only behavior present in the current script, including its MC-mode requirement and personalized plug-in assignments.
-- Separate normal, SHIFT, ALT, and popup-browser operations so hardware usage is easy to scan.
+- Distinguish callable zoom commands from literal mouse-wheel event emulation and mouse-pointer-anchored zoom behavior.
 
 ## Files changed
 
 - `PROGRESS.md`
-- `README.md`
 - `AGENTS.md`
 
 ## Verification
 
-- Compared every documented control and device assignment against `script/XToutchMini.control.js`.
-- Verified the installation paths and MC-mode activation procedure against the official Bitwig and BEHRINGER documentation linked from the README.
+- Confirmed `arranger.zoomIn()`, `arranger.zoomOut()`, and `arranger.zoomLevel()` are available from API 14.
+- Confirmed `arranger_zoom_in`, `arranger_zoom_out`, `zoom_in_around_playback_start_time`, and `zoom_out_around_playback_start_time` display-name entries in the installed resources.
+- Confirmed `getHorizontalScrollbarModel()` and `zoomAtPosition()` require API 21.
 - Ran `git diff --check` successfully.
-- Checked the README heading structure and critical script filename/controller identifiers successfully.
 
 ## Next actions
 
-- No remaining work for this task.
+- No remaining work; implement a chosen encoder mapping if requested.
