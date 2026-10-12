@@ -35,4 +35,6 @@
 
 - The existing Bitwig controller script is stored under the repository-root `script/` directory.
 - The current script entry file is `script/XToutchMini.control.js`. Use the exact existing filename unless a task intentionally renames it and updates every affected reference.
+- The script targets Bitwig Controller API 20, defines one MIDI input and one MIDI output, and supports the X-TOUCH MINI only in MC mode.
+- Install the script below Bitwig Studio's user `Controller Scripts` directory, then register `Behringer` / `X-Touch mini` and assign the X-TOUCH MINI ports in Bitwig's Controllers settings.
 
