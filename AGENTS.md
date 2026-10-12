@@ -39,4 +39,5 @@
 - Install the script below Bitwig Studio's user `Controller Scripts` directory, then register `Behringer` / `X-Touch mini` and assign the X-TOUCH MINI ports in Bitwig's Controllers settings.
 - Bitwig shortcut actions that lack dedicated API methods can be invoked through `application.getAction(actionId).invoke()`. Enumerate the version-specific callable IDs with `application.getActions()`; localization files are useful for searching display names but are not the authoritative runtime list. The play-start grid-step action IDs are `move_playback_start_time_one_step_backward` and `move_playback_start_time_one_step_forward`.
 - ALT + encoder 7 observes `transport.playStartPosition()` and passes that beat position to the API 21 `arranger.getHorizontalScrollbarModel().zoomAtPosition()` method for deterministic anchored zoom. Do not assume localization keys such as `zoom_in_around_playback_start_time` are callable application-action IDs: `Application.getAction()` can return `null`.
+- ALT + encoder 6 inserts the NeuralNote VST3 device at the end of the selected device chain using ID `ABCDEF019182FAEB447241754E524E54`.
 
