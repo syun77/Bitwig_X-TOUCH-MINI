@@ -11,6 +11,10 @@ const VOLUME_0DB = 0.795; // 0dBは 0.795が近似値らしい...
 const MARKER_COUNT = 64;
 // Remote Controlのノブの数 (9以上はエラーとなる).
 const KNOB_COUNT = 8;
+// エンコーダー1段あたりのズーム量 (2の指数).
+const ZOOM_DISTANCE_PER_TICK = 0.25;
+// 高速回転時に1メッセージで適用するズーム量の上限.
+const MAX_ZOOM_TICKS_PER_MESSAGE = 4;
 // ノブの光り方をFANモード (扇形) で上書きする.
 const KNOB_LED_FAN_ENABLE = true;
 // Remote Controlの値を保存するキー数の上限 (シンプルに実装するためFIFO管理).
@@ -82,12 +86,15 @@ var pendingShowFollowing = false; // 追従切り替えを表示するかどう�
 
 // arranger変数.
 var arranger;
+var arrangerHorizontalScrollbar;
 
 // cue marker bank変数.
 var cueMarkerBank;
 
 // 現在の再生位置キャッシュ.
 var currentTransportPos = 0;
+// 青い再生開始マーカーの位置キャッシュ.
+var currentPlaybackStartPos = 0;
 
 // ジャンプ後にマーカー表示を行うフラグ.
 var pendingShowMarker = false;
@@ -134,8 +141,8 @@ var knobKeyOrder = [];
 // ポップアップブラウザ
 var popupBrowser;
 
-// スクリプトのバージョン指定 (v5.xの最新).
-loadAPI(20);
+// スクリプトのAPIバージョン指定.
+loadAPI(21);
 // スクリプトのエラーチェックを有効化.
 host.setShouldFailOnDeprecatedUse(true);
 
@@ -190,8 +197,14 @@ function init() {
     }
   });
 
+  // 再生開始マーカーの位置をズーム基準としてキャッシュ.
+  transport.playStartPosition().addValueObserver(function(pos) {
+    currentPlaybackStartPos = pos;
+  });
+
   // Arrangerを生成.
   arranger = host.createArranger();
+  arrangerHorizontalScrollbar = arranger.getHorizontalScrollbarModel();
   
   // 追従中の通知.
   arranger.isPlaybackFollowEnabled().addValueObserver(function(b) {
@@ -566,8 +579,12 @@ function justRotateKnow(data1, data2) {
       		return;
       	}
       }
-      if(isPressedALT && paramIndex == KNOB_8) {
+      if(isPressedALT && !isPressedShift && paramIndex == KNOB_8) {
         movePlaybackStartByGridStep(increment);
+        return;
+      }
+      if(isPressedALT && !isPressedShift && paramIndex == KNOB_7) {
+        zoomAroundPlaybackStart(increment);
         return;
       }
       if(isPopupBrowserOpen()) {
@@ -608,16 +625,38 @@ function shiftedKnob8(v) {
 
 // ALTを押しているときの8番目のノブの挙動.
 function movePlaybackStartByGridStep(increment) {
-	if(increment == 0) {
+	invokeDirectionalApplicationAction(
+		increment,
+		movePlaybackStartForwardAction,
+		movePlaybackStartBackwardAction
+	);
+}
+
+// ALTを押しているときの7番目のノブの挙動.
+function zoomAroundPlaybackStart(increment) {
+	if(increment === 0) {
 		return;
 	}
 
-	var action = increment > 0
-		? movePlaybackStartForwardAction
-		: movePlaybackStartBackwardAction;
-	var stepCount = Math.abs(increment);
+	var direction = increment > 0 ? 1 : -1;
+	var tickCount = Math.min(Math.abs(increment), MAX_ZOOM_TICKS_PER_MESSAGE);
+	var distance = direction * tickCount * ZOOM_DISTANCE_PER_TICK;
+	arrangerHorizontalScrollbar.zoomAtPosition(currentPlaybackStartPos, distance);
+}
 
-	for(var i = 0; i < stepCount; i++) {
+// 相対エンコーダーの回転方向と量に応じてBitwigアクションを実行する.
+function invokeDirectionalApplicationAction(increment, positiveAction, negativeAction) {
+	if(increment === 0) {
+		return;
+	}
+
+	var action = increment > 0 ? positiveAction : negativeAction;
+	if(action === null) {
+		println("Application action is not available.");
+		return;
+	}
+
+	for(var i = 0; i < Math.abs(increment); i++) {
 		action.invoke();
 	}
 }

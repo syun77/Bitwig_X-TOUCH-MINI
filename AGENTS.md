@@ -35,8 +35,8 @@
 
 - The existing Bitwig controller script is stored under the repository-root `script/` directory.
 - The current script entry file is `script/XToutchMini.control.js`. Use the exact existing filename unless a task intentionally renames it and updates every affected reference.
-- The script targets Bitwig Controller API 20, defines one MIDI input and one MIDI output, and supports the X-TOUCH MINI only in MC mode.
+- The script targets Bitwig Controller API 21, defines one MIDI input and one MIDI output, and supports the X-TOUCH MINI only in MC mode.
 - Install the script below Bitwig Studio's user `Controller Scripts` directory, then register `Behringer` / `X-Touch mini` and assign the X-TOUCH MINI ports in Bitwig's Controllers settings.
 - Bitwig shortcut actions that lack dedicated API methods can be invoked through `application.getAction(actionId).invoke()`. Enumerate the version-specific callable IDs with `application.getActions()`; localization files are useful for searching display names but are not the authoritative runtime list. The play-start grid-step action IDs are `move_playback_start_time_one_step_backward` and `move_playback_start_time_one_step_forward`.
-- With the script's Controller API 20 target, horizontal arranger zoom is available through `arranger.zoomIn()` / `zoomOut()` or actions `arranger_zoom_in` / `arranger_zoom_out`; `zoom_in_around_playback_start_time` / `zoom_out_around_playback_start_time` provide a predictable play-start anchor. Arbitrary-position `getHorizontalScrollbarModel().zoomAtPosition()` requires API 21.
+- ALT + encoder 7 observes `transport.playStartPosition()` and passes that beat position to the API 21 `arranger.getHorizontalScrollbarModel().zoomAtPosition()` method for deterministic anchored zoom. Do not assume localization keys such as `zoom_in_around_playback_start_time` are callable application-action IDs: `Application.getAction()` can return `null`.
 

@@ -7,7 +7,7 @@ BEHRINGER X-TOUCH MINI から Bitwig Studio を操作するための JavaScript 
 ## 必要なもの
 
 - BEHRINGER X-TOUCH MINI
-- Bitwig Studio（Controller API 20 を使用できるバージョン）
+- Bitwig Studio（Controller API 21 を使用できるバージョン）
 - X-TOUCH MINI とコンピューターを接続する USB ケーブル
 - 固定割り当てから挿入する場合は、対応するプラグインが指定形式でインストール済みであること
 
@@ -52,6 +52,7 @@ BEHRINGER X-TOUCH MINI から Bitwig Studio を操作するための JavaScript 
 | エンコーダー 1〜8を押す | 現在のトラック、デバイス、Remote Controls ページへ切り替えた直後の値に戻す |
 | `SHIFT` + エンコーダー 1〜7を回す | Remote Controls 1〜7を相対操作し、Bitwig Studio 上の Remote Controls セクションを隠す |
 | `SHIFT` + エンコーダー 8を回す | Remote Controls の前後のページへ移動 |
+| `ALT` + エンコーダー 7を回す | 青い再生開始マーカーの位置を基準にズームイン／ズームアウト |
 | `ALT` + エンコーダー 8を回す | 再生開始時間を現在のグリッドで1ステップ前／先へ移動 |
 | フェーダー | 選択中トラックの音量を操作 |
 
