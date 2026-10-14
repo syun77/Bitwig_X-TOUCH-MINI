@@ -52,6 +52,7 @@ BEHRINGER X-TOUCH MINI から Bitwig Studio を操作するための JavaScript 
 | エンコーダー 1〜8を押す | 現在のトラック、デバイス、Remote Controls ページへ切り替えた直後の値に戻す |
 | `SHIFT` + エンコーダー 1〜7を回す | Remote Controls 1〜7を相対操作し、Bitwig Studio 上の Remote Controls セクションを隠す |
 | `SHIFT` + エンコーダー 8を回す | Remote Controls の前後のページへ移動 |
+| `ALT` + エンコーダー 6を回す | テンポを1段につき1 BPM増減 |
 | `ALT` + エンコーダー 7を回す | 青い再生開始マーカーの位置を基準にズームイン／ズームアウト |
 | `ALT` + エンコーダー 8を回す | 再生開始時間を現在のグリッドで1ステップ前／先へ移動 |
 | フェーダー | 選択中トラックの音量を操作 |

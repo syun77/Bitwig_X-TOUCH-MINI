@@ -2,33 +2,37 @@
 
 ## Current task
 
-- Objective: Remove the unsupported SHIFT + follow Detail Editor feature while preserving normal Arranger follow behavior.
+- Objective: Make ALT + encoder 6 change tempo by ±1 BPM per detent.
 - Status: Complete.
 
 ## Completed
 
-- Removed the SHIFT + follow branch and all Detail Editor action-discovery code.
-- Removed the SHIFT + follow mapping and LED explanation from the README.
-- Preserved the normal follow button's Arranger toggle, notification, observer, and LED behavior unchanged.
-- Recorded the verified Bitwig 6.0.11 limitation in `AGENTS.md`.
-- Completed the required final refactoring pass; no unused constants, variables, helpers, or documentation references remain.
+- Read the previous task state and located the encoder rotation dispatch and documentation.
+- Confirmed API 21 exposes raw tempo increments through `transport.tempo().incRaw()`.
+- Implemented ALT + encoder 6 as a 1 BPM change per encoded tick.
+- Reduced the increment from 10 BPM to 1 BPM after hands-on use showed 10 BPM was too coarse.
+- Updated the README mapping and durable repository knowledge.
+- Completed the required final refactoring pass; the tempo constant, dispatch branch, and helper are narrowly scoped and no duplication or dead code was introduced.
 
 ## Important decisions
 
-- Do not retain a nonfunctional compatibility path. Controller API 21 has no direct Detail Editor follow control, and Bitwig 6.0.11 did not expose a callable application action during runtime testing.
+- Preserve the controller's relative-value magnitude, so accelerated encoder messages change 1 BPM for every encoded tick.
+- Keep the encoder-press NeuralNote assignment unchanged; rotation and press mappings are independent.
 
 ## Files changed
 
 - `PROGRESS.md`
+- `script/XToutchMini.control.js`
+- `README.md`
 - `AGENTS.md`
 
 ## Verification
 
 - Passed JavaScript syntax validation with the bundled Node.js runtime.
+- Passed a mocked MIDI routing test: clockwise value `1` produced `+1` BPM and counterclockwise value `66` (two encoded ticks) produced `-2` BPM.
 - Passed `git diff --check`.
-- Confirmed no Detail Editor follow constants, variables, resolver functions, popup text, or README mappings remain.
-- Confirmed the controller script and README match their pre-experiment content for this feature.
+- Confirmed the README and `AGENTS.md` describe ALT + encoder 6 rotation separately from its press action.
 
 ## Next actions
 
-- Reload the controller script in Bitwig Studio; normal follow continues to control Arranger playback follow.
+- Reload the controller script in Bitwig Studio and confirm the tempo changes by 1 BPM per physical encoder detent.

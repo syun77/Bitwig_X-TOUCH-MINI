@@ -15,6 +15,8 @@ const KNOB_COUNT = 8;
 const ZOOM_DISTANCE_PER_TICK = 0.25;
 // 高速回転時に1メッセージで適用するズーム量の上限.
 const MAX_ZOOM_TICKS_PER_MESSAGE = 4;
+// エンコーダー1段あたりのテンポ変更量 (BPM).
+const TEMPO_CHANGE_PER_TICK = 1;
 // ノブの光り方をFANモード (扇形) で上書きする.
 const KNOB_LED_FAN_ENABLE = true;
 // Remote Controlの値を保存するキー数の上限 (シンプルに実装するためFIFO管理).
@@ -612,6 +614,10 @@ function justRotateKnow(data1, data2) {
         zoomAroundPlaybackStart(increment);
         return;
       }
+      if(isPressedALT && !isPressedShift && paramIndex == KNOB_6) {
+        changeTempo(increment);
+        return;
+      }
       if(isPopupBrowserOpen()) {
       	// ポップアップブラウザを開いているときは特殊処理.
       	if(paramIndex == KNOB_8) {
@@ -667,6 +673,15 @@ function zoomAroundPlaybackStart(increment) {
 	var tickCount = Math.min(Math.abs(increment), MAX_ZOOM_TICKS_PER_MESSAGE);
 	var distance = direction * tickCount * ZOOM_DISTANCE_PER_TICK;
 	arrangerHorizontalScrollbar.zoomAtPosition(currentPlaybackStartPos, distance);
+}
+
+// ALTを押しているときの6番目のノブの挙動.
+function changeTempo(increment) {
+	if(increment === 0) {
+		return;
+	}
+
+	transport.tempo().incRaw(increment * TEMPO_CHANGE_PER_TICK);
 }
 
 // 相対エンコーダーの回転方向と量に応じてBitwigアクションを実行する.
