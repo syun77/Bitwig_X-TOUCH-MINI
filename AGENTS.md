@@ -49,4 +49,5 @@
 - Bitwig's bundled Maschine JAM script treats device navigation as two axes: previous/next sibling, plus explicit parent/first-slot entry. It observes slot names and enters `currentSlotList[0]`; this avoids pretending that the API supplies a built-in flattened tree traversal.
 - ALT + LAYER A selects the parent device; ALT + LAYER B selects the first device in the current device's first reported slot. SHIFT still takes precedence over ALT, and popup-browser navigation takes priority over both.
 - Upper-row MC mode notes 40 and 41 invoke `Application.undo()` and `Application.redo()`, respectively.
+- Controller API 21 exposes playback-follow state only on `Arranger`; `DetailEditor` / `TimelineEditor` have no equivalent follow property or action. Bitwig 6.0.11 runtime testing also found no callable Detail Editor follow command through `application.getAction()` or `application.getActions()`, including action ID, name, and menu-text searches. Do not implement SHIFT + follow unless a future Bitwig version exposes a supported action.
 

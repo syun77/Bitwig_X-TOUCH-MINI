@@ -2,35 +2,33 @@
 
 ## Current task
 
-- Objective: Assign Undo and Redo to buttons 40 and 41.
+- Objective: Remove the unsupported SHIFT + follow Detail Editor feature while preserving normal Arranger follow behavior.
 - Status: Complete.
 
 ## Completed
 
-- Read the prior task state and preserved existing working-tree changes.
-- Located buttons 40 and 41 in the pressed-button dispatcher; both are currently unused.
-- Renamed the button constants to `BTN_UNDO` and `BTN_REDO` and wired them to `Application.undo()` and `Application.redo()`.
-- Updated the README button mapping and durable repository knowledge.
-- Completed the required final refactoring pass; direct calls through the existing `application` object are the simplest current design.
+- Removed the SHIFT + follow branch and all Detail Editor action-discovery code.
+- Removed the SHIFT + follow mapping and LED explanation from the README.
+- Preserved the normal follow button's Arranger toggle, notification, observer, and LED behavior unchanged.
+- Recorded the verified Bitwig 6.0.11 limitation in `AGENTS.md`.
+- Completed the required final refactoring pass; no unused constants, variables, helpers, or documentation references remain.
 
 ## Important decisions
 
-- Preserve all pre-existing uncommitted work and limit this change to the two button assignments plus current documentation.
+- Do not retain a nonfunctional compatibility path. Controller API 21 has no direct Detail Editor follow control, and Bitwig 6.0.11 did not expose a callable application action during runtime testing.
 
 ## Files changed
 
 - `PROGRESS.md`
-- `script/XToutchMini.control.js`
-- `README.md`
 - `AGENTS.md`
 
 ## Verification
 
 - Passed JavaScript syntax validation with the bundled Node.js runtime.
 - Passed `git diff --check`.
-- Confirmed Note 40/41 constants and handlers map exactly to Undo/Redo, with no obsolete unused-button names remaining.
+- Confirmed no Detail Editor follow constants, variables, resolver functions, popup text, or README mappings remain.
+- Confirmed the controller script and README match their pre-experiment content for this feature.
 
 ## Next actions
 
-- Reload the script in Bitwig Studio and verify Undo/Redo from the third and fourth upper-row buttons.
-- Hardware verification remains pending.
+- Reload the controller script in Bitwig Studio; normal follow continues to control Arranger playback follow.
