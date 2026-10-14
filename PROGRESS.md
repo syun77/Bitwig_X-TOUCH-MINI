@@ -2,33 +2,35 @@
 
 ## Current task
 
-- Objective: Unify the selected-track Mute state variable and remove the implicit `isMuted` global.
+- Objective: Assign Undo and Redo to buttons 40 and 41.
 - Status: Complete.
 
 ## Completed
 
-- Read the previous task state and preserved its existing changes.
-- Changed the Mute observer and LED update to use the declared `isMute` variable.
-- Recorded the Mute state-variable invariant as durable repository knowledge.
-- Completed the required final refactoring review; retaining `isMute` is consistent with `isSolo` and avoids an unnecessary wider rename.
+- Read the prior task state and preserved existing working-tree changes.
+- Located buttons 40 and 41 in the pressed-button dispatcher; both are currently unused.
+- Renamed the button constants to `BTN_UNDO` and `BTN_REDO` and wired them to `Application.undo()` and `Application.redo()`.
+- Updated the README button mapping and durable repository knowledge.
+- Completed the required final refactoring pass; direct calls through the existing `application` object are the simplest current design.
 
 ## Important decisions
 
-- Keep `isMute` because it is already declared and follows the existing `isSolo` state naming pattern.
+- Preserve all pre-existing uncommitted work and limit this change to the two button assignments plus current documentation.
 
 ## Files changed
 
 - `PROGRESS.md`
-- `AGENTS.md`
 - `script/XToutchMini.control.js`
+- `README.md`
+- `AGENTS.md`
 
 ## Verification
 
 - Passed JavaScript syntax validation with the bundled Node.js runtime.
 - Passed `git diff --check`.
-- Confirmed no `isMuted` references remain and all three Mute-state references use `isMute`.
+- Confirmed Note 40/41 constants and handlers map exactly to Undo/Redo, with no obsolete unused-button names remaining.
 
 ## Next actions
 
-- Reload the controller script in Bitwig Studio and verify the Mute LED follows the selected track's Mute state.
+- Reload the script in Bitwig Studio and verify Undo/Redo from the third and fourth upper-row buttons.
 - Hardware verification remains pending.

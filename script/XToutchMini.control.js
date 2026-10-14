@@ -43,8 +43,8 @@ const MOVE_PLAYBACK_START_FORWARD_ACTION = "move_playback_start_time_one_step_fo
 /// 1段目.
 const BTN_PLUGIN_WINDOW = 89; // プラグインウィンドウの表示/非表示.
 const BTN_POPUP_BROWSER = 90; // ポップアップブラウザの表示.
-const BTN_UNUSED_40 = 40; // ※未使用.
-const BTN_UNUSED_41 = 41; // ※未使用.
+const BTN_UNDO = 40; // Undo.
+const BTN_REDO = 41; // Redo.
 const BTN_SOLO = 42; // 現在のトラックをソロ.
 const BTN_MUTE = 43; // 現在のトラックをミュート.
 const BTN_FOLLOWING = 44; // 再生ヘッドに追従.
@@ -61,8 +61,8 @@ const BTN_PLAYING = 94; // 再生.
 const BTN_RECORDING = 95; // 録音.
 
 /// Layer.
-const BTN_PREV_TRACK = 84; // 上のトラックに移動.
-const BTN_NEXT_TRACK = 85; // 下のトラックに移動.
+const BTN_LAYER_A = 84;
+const BTN_LAYER_B = 85;
 // --------------------------------------------------------------------------
 // ■UUID関連は末尾に移動.
 // --------------------------------------------------------------------------
@@ -244,6 +244,7 @@ function init() {
   cursorTrack = host.createCursorTrack("MyCursorTrack", "MyCursorTrack", 0, 0, true);
   cursorDevice = cursorTrack.createCursorDevice("MyCursorDevice", "MyCursorDevice", 0,
   	CursorDeviceFollowMode.FOLLOW_SELECTION);
+  cursorDevice.slotNames().markInterested();
   deviceChain = cursorDevice.deviceChain(); // デバイスチェインを取得.
   deviceChain.name().markInterested(); // 名前を取得できるようにする.
 
@@ -433,28 +434,44 @@ function justPressedButton(data1, data2) {
   	pendingShowFollowing = true; // 切り替えメッセージ表示.
     arranger.isPlaybackFollowEnabled().toggle();
   }
-  else if(data1 == BTN_UNUSED_40) {
-  	// 未使用.
+  else if(data1 == BTN_UNDO) {
+    application.undo();
   }
-  else if(data1 == BTN_UNUSED_41) {
-  	// 未使用.
+  else if(data1 == BTN_REDO) {
+    application.redo();
   }
-  else if(data1 == BTN_NEXT_TRACK) {
+  else if(data1 == BTN_LAYER_B) {
   	if(isPopupBrowserOpen()) {
   		// ポップアップブラウザの場合はコンテンツの選択.
   		popupBrowser.selectNextFile();
   	}
+	  else if(isPressedShift) {
+	    // SHIFTキーを押していたら、次のデバイスに移動.
+	    cursorDevice.selectNext();
+	  }
+	  else if(isPressedALT) {
+	    // ALTキーを押していたら、先頭の子スロットに移動.
+	    selectFirstChildDevice();
+	  }
   	else {
 	    // そうでなければ次のトラックに移動.
 	    pendingShowTrackName = true; // トラック名の表示.
 	    cursorTrack.selectNext();
   	}
   }
-  else if(data1 == BTN_PREV_TRACK) {
+  else if(data1 == BTN_LAYER_A) {
   	if(isPopupBrowserOpen()) {
   		// ポップアップブラウザの場合はコンテンツの選択.
   		popupBrowser.selectPreviousFile();
   	}
+	  else if(isPressedShift) {
+	    // SHIFTキーを押していたら、前のデバイスに移動.
+	    cursorDevice.selectPrevious();
+	  }
+	  else if(isPressedALT) {
+	    // ALTキーを押していたら、親デバイスに移動.
+	    cursorDevice.selectParent();
+	  }
   	else {
 	    // そうでなければ前のトラックに移動.
 	    pendingShowTrackName = true; // トラック名の表示.
@@ -519,6 +536,14 @@ function justPressedButton(data1, data2) {
   	// ALTキーを押している.
   	isPressedALT = true;
   	midiOut.sendMidi(XTOUCH_BTN_STATUS, BTN_ALT, 127); // 点灯.
+  }
+}
+
+// 現在のデバイスが持つ先頭スロット内の最初のデバイスを選択.
+function selectFirstChildDevice() {
+  var slotNames = cursorDevice.slotNames().get();
+  if(slotNames && slotNames.length > 0) {
+    cursorDevice.selectFirstInSlot(slotNames[0]);
   }
 }
 

@@ -44,4 +44,9 @@
 - Modifier handling is intentionally sparse: SHIFT takes precedence over ALT; specialized encoder rotations are SHIFT + encoder 8 and ALT + encoders 7/8, while other modified rotations fall through to Remote Controls. Most modified button combinations have no distinct assignment.
 - The Solo observer must clear `pendingShowSolo` after showing a controller-initiated notification. Clearing `pendingShowMute` instead leaves Solo notifications permanently armed and can suppress a pending Mute notification.
 - The selected-track Mute state is stored in the declared `isMute` variable; both its observer and LED update must use that name so the script does not rely on an implicit global.
+- SHIFT + LAYER A/B selects the previous/next device. Popup-browser candidate navigation has priority while the browser is open; unmodified LAYER A/B continues to select the previous/next track.
+- `CursorDevice.selectPrevious()` / `selectNext()` traverse siblings in the current device chain only; they do not flatten nested slots or layers. Hierarchy changes require `selectParent()` or an explicit entry method such as `selectFirstInSlot(slotName)`.
+- Bitwig's bundled Maschine JAM script treats device navigation as two axes: previous/next sibling, plus explicit parent/first-slot entry. It observes slot names and enters `currentSlotList[0]`; this avoids pretending that the API supplies a built-in flattened tree traversal.
+- ALT + LAYER A selects the parent device; ALT + LAYER B selects the first device in the current device's first reported slot. SHIFT still takes precedence over ALT, and popup-browser navigation takes priority over both.
+- Upper-row MC mode notes 40 and 41 invoke `Application.undo()` and `Application.redo()`, respectively.
 
