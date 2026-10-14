@@ -41,4 +41,7 @@
 - ALT + encoder 7 observes `transport.playStartPosition()` and passes that beat position to the API 21 `arranger.getHorizontalScrollbarModel().zoomAtPosition()` method for deterministic anchored zoom. Do not assume localization keys such as `zoom_in_around_playback_start_time` are callable application-action IDs: `Application.getAction()` can return `null`.
 - ALT + encoder 6 inserts the NeuralNote VST3 device at the end of the selected device chain using ID `ABCDEF019182FAEB447241754E524E54`.
 - ALT + encoder 5 inserts the Scaler 3 VST3 device at the end of the selected device chain using ID `ABCDEF019182FAEB53634D7353636C33`.
+- Modifier handling is intentionally sparse: SHIFT takes precedence over ALT; specialized encoder rotations are SHIFT + encoder 8 and ALT + encoders 7/8, while other modified rotations fall through to Remote Controls. Most modified button combinations have no distinct assignment.
+- The Solo observer must clear `pendingShowSolo` after showing a controller-initiated notification. Clearing `pendingShowMute` instead leaves Solo notifications permanently armed and can suppress a pending Mute notification.
+- The selected-track Mute state is stored in the declared `isMute` variable; both its observer and LED update must use that name so the script does not rely on an implicit global.
 

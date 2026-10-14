@@ -253,14 +253,14 @@ function init() {
     if(pendingShowSolo) {
     	// ソロ切り替えの表示.
     	host.showPopupNotification("ソロ: " + (b ? "ON" : "OFF"));
-    	pendingShowMute = false;
+      pendingShowSolo = false;
     }
 	  updateSoloLED();
 	});
 
   // 現在のトラックの状態をミュート.
 	cursorTrack.mute().addValueObserver(function(b) {
-	  isMuted = b;
+	  isMute = b;
     if(pendingShowMute) {
     	// ミュート切り替えの表示.
     	host.showPopupNotification("ミュート: " + (b ? "ON" : "OFF"));
@@ -916,7 +916,7 @@ function updateWindowOpenLED() {
   midiOut.sendMidi(XTOUCH_BTN_STATUS, BTN_PLUGIN_WINDOW, isWindowOpen ? 127 : 0);
 }
 function updateMuteLED() {
-  midiOut.sendMidi(XTOUCH_BTN_STATUS, BTN_MUTE, isMuted ? 127 : 0);
+  midiOut.sendMidi(XTOUCH_BTN_STATUS, BTN_MUTE, isMute ? 127 : 0);
 }
 
 function updateSoloLED() {
