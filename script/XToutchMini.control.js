@@ -1009,7 +1009,7 @@ const UUID_MELODYNE = "5653544D6C70676D656C6F64796E6520"; // 7. Melodyne (VST3).
 /// ALT.
 const UUID_AVENGER2   = "6B417564564E47435752505241766772"; // 1. VPS Avenger 2 (VST3).
 const UUID_VITAL      = "56535456697461766974616C00000000"; // 2. Vital (VST3). CLAP版は不具合がある.
-const UUID_TYRELLN6   = "com.u-he.TyrellN6";                // 3. Tyrell-N6 (CLAP).
+const UUID_ZENOLOGY   = "324755DF8FDF4788B4CE5B70A8037EC4"; // 3. Zenology (VST3).
 const UUID_SCALER3    = "ABCDEF019182FAEB53634D7353636C33"; // 5. Scaler 3 (VST3).
 const UUID_NEURALNOTE = "ABCDEF019182FAEB447241754E524E54"; // 6. NeuralNote (VST3).
 const UUID_GLITCH2    = 1768385586;                         // 7. Glitch2 (VST2).
@@ -1084,9 +1084,9 @@ const ALT_KNOB_PRESS_TABLE = {
     position: INSERT_AT_END
   },
   3: {
-    name: "Tyrell-N6",
-    type: DEVICE_TYPE_CLAP,
-    id: UUID_TYRELLN6,
+    name: "Zenology",
+    type: DEVICE_TYPE_VST3,
+    id: UUID_ZENOLOGY,
     position: INSERT_AT_END
   },
   4: {

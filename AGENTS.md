@@ -42,6 +42,7 @@
 - ALT + encoder 6 changes project tempo by 1 BPM per encoder tick through `transport.tempo().incRaw()`.
 - ALT + encoder 6 inserts the NeuralNote VST3 device at the end of the selected device chain using ID `ABCDEF019182FAEB447241754E524E54`.
 - ALT + encoder 5 inserts the Scaler 3 VST3 device at the end of the selected device chain using ID `ABCDEF019182FAEB53634D7353636C33`.
+- ALT + encoder 3 inserts the Zenology VST3 device at the end of the selected device chain using ID `324755DF8FDF4788B4CE5B70A8037EC4`.
 - Modifier handling is intentionally sparse: SHIFT takes precedence over ALT; specialized encoder rotations are SHIFT + encoder 8 and ALT + encoders 6/7/8, while other modified rotations fall through to Remote Controls. Most modified button combinations have no distinct assignment.
 - The Solo observer must clear `pendingShowSolo` after showing a controller-initiated notification. Clearing `pendingShowMute` instead leaves Solo notifications permanently armed and can suppress a pending Mute notification.
 - The selected-track Mute state is stored in the declared `isMute` variable; both its observer and LED update must use that name so the script does not rely on an implicit global.

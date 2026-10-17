@@ -2,22 +2,19 @@
 
 ## Current task
 
-- Objective: Make ALT + encoder 6 change tempo by ±1 BPM per detent.
+- Objective: Replace the ALT + encoder 3 press assignment from Tyrell-N6 to Zenology VST3 using ID `324755DF8FDF4788B4CE5B70A8037EC4`.
 - Status: Complete.
 
 ## Completed
 
-- Read the previous task state and located the encoder rotation dispatch and documentation.
-- Confirmed API 21 exposes raw tempo increments through `transport.tempo().incRaw()`.
-- Implemented ALT + encoder 6 as a 1 BPM change per encoded tick.
-- Reduced the increment from 10 BPM to 1 BPM after hands-on use showed 10 BPM was too coarse.
+- Read the previous task state and located the ALT encoder-press assignment table and documentation.
+- Replaced the Tyrell-N6 CLAP definition with the Zenology VST3 definition and updated ALT encoder 3 to use it.
 - Updated the README mapping and durable repository knowledge.
-- Completed the required final refactoring pass; the tempo constant, dispatch branch, and helper are narrowly scoped and no duplication or dead code was introduced.
+- Completed the required final refactoring pass; the existing table-driven design remains the simplest implementation, and no duplication or dead code was introduced.
 
 ## Important decisions
 
-- Preserve the controller's relative-value magnitude, so accelerated encoder messages change 1 BPM for every encoded tick.
-- Keep the encoder-press NeuralNote assignment unchanged; rotation and press mappings are independent.
+- Treat the provided 32-character hexadecimal plugin ID as a VST3 ID and keep the existing end-of-chain insertion position.
 
 ## Files changed
 
@@ -29,10 +26,10 @@
 ## Verification
 
 - Passed JavaScript syntax validation with the bundled Node.js runtime.
-- Passed a mocked MIDI routing test: clockwise value `1` produced `+1` BPM and counterclockwise value `66` (two encoded ticks) produced `-2` BPM.
-- Passed `git diff --check`.
-- Confirmed the README and `AGENTS.md` describe ALT + encoder 6 rotation separately from its press action.
+- Passed static mapping checks for the Zenology ID, ALT encoder 3 assignment, and VST3 insertion dispatch.
+- Confirmed no Tyrell-N6 references remain in implementation or user documentation.
+- Passed `git diff --check` after the final refactoring review.
 
 ## Next actions
 
-- Reload the controller script in Bitwig Studio and confirm the tempo changes by 1 BPM per physical encoder detent.
+- Reload the controller script in Bitwig Studio and confirm ALT + encoder 3 inserts Zenology at the end of the selected device chain.
